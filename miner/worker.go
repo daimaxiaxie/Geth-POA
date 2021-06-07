@@ -440,6 +440,7 @@ func (w *worker) mainLoop() {
 		case req := <-w.newWorkCh:
 			w.commitNewWork(req.interrupt, req.noempty, req.timestamp)
 
+		//区块链中加入了一个新区块作为当前链头的旁支的信号
 		case ev := <-w.chainSideCh:
 			// Short circuit for duplicate side blocks
 			if _, exist := w.localUncles[ev.Block.Hash()]; exist {
@@ -479,6 +480,7 @@ func (w *worker) mainLoop() {
 				}
 			}
 
+		//交易池的Pending中新加入了交易事件的信号
 		case ev := <-w.txsCh:
 			// Apply transactions to the pending state if we're not mining.
 			//
